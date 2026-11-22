@@ -1,0 +1,6 @@
+"Refs","Value","Footprint","Qty","Description"
+"C1","100n","Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm","1","keyboard supply decoupling, at J3"
+"J1,J2","Conn_01x20_Socket","Connector_PinSocket_2.54mm:PinSocket_1x20_P2.54mm_Vertical","2","for U1 left header (J6); BoM only,for U1 right header (J5); BoM only"
+"J3","PS/2 socket","TurboACE:MiniDIN6_PS2_Female","1","PS/2 keyboard socket, 6-pin mini-DIN female, right angle, shielded (Mauser 011-0716): 1 DATA, 3 GND, 4 +5V, 5 CLK, shield GND"
+"U1","TangNano20K","TurboACE:TangNano20K","1","Sipeed Tang Nano 20K, plugged into J1 (left header J6, pins 1-20) and J2 (right header J5, 21-40)"
+"U2","Level shifter 4ch BSS138","TurboACE:LevelShifter_BSS138_4ch_Gebildet","1","Gebildet 4-channel BSS138 level shifter (SparkFun BOB-12009 layout), soldered on its two 6-pin headers: channel 1 clock, 2 data; LV 3.3 V, HV 5 V; 10k pull-ups on board"

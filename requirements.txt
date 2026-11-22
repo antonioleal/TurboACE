@@ -1,0 +1,33 @@
+TurboACE is both an hardware Expansion to a standard Jupiter Ace computer and a Standalone Jupiter Ace computer.
+
+- Retrocompatibility with existing original Jupiter ACE software must be ensured.
+
+- Implemented on a Sipeed Tang Nano 20K FPGA module (Gowin GW2AR-18, 8 MB SDRAM in package, HDMI connector, microSD slot) on a small adapter board with 3.3V/5V bus buffers
+- Two bitstreams from one FPGA design: the expansion (on a real Ace), and a standalone Jupiter Ace inside the FPGA (Z80 core, PS/2 keyboard, tape via the SD card only, no real computer). Switching = re-flashing the board.
+- Standalone build: T80 Z80 core (MiSTer-maintained), Gowin EDA toolchain, openFPGALoader to program the board, stock Ace video WAIT contention reproduced.
+- Standalone keyboard: PS/2, translated by the soft CPU; symbolic (default) and positional modes toggled by Scroll Lock; US and Portuguese layouts set in /turboace.cfg on the card; Ctrl+Alt+Del resets. Hardware: a small standalone carrier board (KiCad, kicad/standalone) with the module on two female headers, the PS/2 socket (6-pin mini-DIN, PCB mount) at its edge, and a BSS138 bidirectional level shifter (5 V keyboard, 3.3 V FPGA).
+- The stock Ace ROM is loaded from /ace.rom on the SD card at power-up (MD5 db6efdfd82cebdfbb493d85b1a5efc3c, 8192 bytes); no bitstream contains it.
+- ROM page selected by software
+
+- High resolution 256x192 pixels (0 MODE is Jupiter Ace Standard; 1 MODE is High RES, direct bitmap only, with the text screen overlaid in colour: transparent by default, opaque with OPAQUE)
+- Colour support like the https://github.com/antonioleal/Jupiter-IIb  (same keywords)
+- 32 pages in text-mode; up to 32 high-resolution screens, each held in two 8KB user-RAM pages (6KB bitmap + 6KB 8x1 colour).
+- 32 character sets in memory simultaneously.
+- Shadow screen (CPU can access any of the video pages regardless of which one is currently being viewed).
+- ZX Spectrum graphics words: PLOT, DRAW (dx dy a DRAW: lines, and arcs through a degrees as Spectrum DRAW x,y,a; no LINE word), CIRCLE, POINT, INVERSE, FLIP (Spectrum OVER, renamed: OVER is the Forth stack word), CLS, plus PAINT (graphics fill). PLOT and CLS are supersets of the stock words. No separate ARC word: arcs are DRAW's angle. FILL is the memory fill (addr n byte FILL)
+- Programming words from the user's Forth library in the ROM: .S ' 2* 2/ 0<> CASE OF ENDOF ENDCASE RND RAND GR and the double-cell words (2DUP 2DROP 2SWAP 2OVER 2ROT D. D.R D- D= D0= DABS S->D); the rest of the library becomes tape files on the SD card.
+- Floating-point words in the ROM: PI FSQRT FSIN FCOS FTAN FABS F< F> F0< F0= (rewritten from the user's library). The rest of that library (strings, arrays, WRD, time) is not wanted.
+- Soft CPU: RV32IC (compressed instructions) with 48K of block RAM; the firmware measures about 36K plus a 4K stack.
+- Reused cores: PicoRV32 (RV32IC soft CPU, ISC), hdl-util/hdmi (HDMI with sound, MIT/Apache-2.0), our own SDRAM controller, ay.sv from JupiterACE_MiSTer (GPL v2+, the user's own).
+
+Extra 512KB of paged User RAM (64 x 8KB pages, shown in two independent 8KB windows at $C000-$DFFF and $E000-$FFFF) plus 32KB fixed RAM at $4000-$BFFF and 3KB at $3000-$3BFF, all supplied by the expansion (host: stock 3K Jupiter Ace, no RAM pack). Base (unpaged) RAM: 36KB.
+No mode switch: the machine boots as a 51K Ace (like a 48K RAM pack) with the SD card words (SDTAPE TAPE EJECT DIR CD DELETE SDERR); the word TURBO selects 1 = TurboACE extension (stack below $C000), 0 = 51K Ace with the SD card words, -1 = stock Ace until reset whose tape words keep using the card (tape chosen before, SDTAPE on), -2 = completely stock Ace with the original ROM, the whole $3000 mirror and the real cassette, until reset.
+Video timing: 50 Hz PAL (stock Jupiter Ace timing)
+CPU speed: stock 3.25 MHz
+Video output: HDMI, 720x576 at 50 Hz (TurboACE picture doubled and centred, with the border). No analogue RGB.
+AY-3-8910 sound, implemented in the FPGA, output as HDMI audio
+SD card storage on the module's microSD slot: a small soft CPU in the FPGA runs FatFs (FAT, readable on a PC); the Z80 uses file-level commands on ports $E5/$E7. The stock tape words (SAVE, LOAD, BSAVE, BLOAD, VERIFY, BVERIFY) can use the card through a virtual tape player (.TAP/.TZX files). New words: SDTAPE, TAPE, EJECT, DIR, CD, DELETE, PGSAVE, PGLOAD, SCRSAVE, SCRLOAD, FONTLOAD, SDERR. Forth blocks later.
+
+The result is a schematic + BoM (adapter board for the Tang Nano 20K) + the FPGA design (Verilog) + the soft-CPU firmware (C, FatFs) + the ROM ASSEMBLER code
+
+- Boards in KiCad 10 (the 10.0.8 AppImage): KiCad schematics and a KiCad PCB for each board (the adapter board for a real Ace, and the standalone PS/2 carrier), with the BoM generated from the schematic. The PCB is delivered with footprints placed, the board outline and the design rules set, ready for the user to tune and route by hand. ERC, DRC and the schematic-PCB parity are run with kicad-cli.

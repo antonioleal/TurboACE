@@ -1,0 +1,182 @@
+scratch area + TODO keeper for sjasmplus developers:
+====================================================
+
+
+====================
+Ped:
+
+https://www.codefactor.io/repository/github/z00m128/sjasmplus
+
+coverage keeps fluctuating because of io_nex.cpp `SNexFile::~SNexFile()`, probably depends on compiler's exact version and mood???
+-> it's global `static SNexFile nex;` -> add maybe unit test instancing it as local variable to enforce exercising destructor?
+(not so simple, as unit test doesn't know the struct definition and it's private to io_nex.cpp)
+
+APPENDBIN to append any-size binary to other file, like for producing large dot files with data files appended
+(and let's do GiB+ support as well, INCBIN is limited to 2GiB by `int32` for length and does read it all into heap memory)
+
+baze — Today at 22:22
+@neon Even if you keep paging outs in machine code, it's a good idea to keep LOAD in BASIC. My suggestion would be to use set 4,(iy + 1) so that +3 BASIC doesn't corrupt page 7 during IM 1. Then, for every out (c),a you also do ld (#5B5C),a to keep 128 BASIC happy. I think that should work with 48K BASIC, 128K BASIC and +3 BASIC.
+
+errors: add new CLI option for the "emitted/included at/from" messages,
+keeping the assembler more silent in msg=war|err mode
+
+listing with pre-substituted original source line included
+ catch list: DUP -> EDUP, `nop:nop:nop`, ...
+ output: maybe `<` like macros have `>`? and missing address, only line number?
+
+relocation -> extra support for Next driver banks?
+(see Robin's https://github.com/Threetwosevensixseven/ZXRelocate to learn what exactly that means)
+
+check https://github.com/google/AFL
+
+add block/reserve which does really preserve the device memory content (currently only the
+structure block+align does preserve memory, and standalone ALIGN, but not DS/BLOCK)
+
+"emitted from here" error should maybe show original line, as people not using error parsing
+claim it's confusing/useless.
+ -> turned out to be lot more difficult than expected (macros + lua inlining)
+
+parser.cpp ParseExpShift and other "needa" doing transformations (shr => '>' ???)
+- write tests trying those "while" loops for groups of operators
+- write tests testing operator precedence
+
+CSPECTMAP - needs better support for DISP
+- also reported to be not as good as external tool, but seems that is due to not-using DEVICE directive by author
+(can't help that)
+
+--syntax: "I" to uppercase all labels + usage (needs labels refactoring)
+--syntax: L options implementation
+    add DOCS example test: "hl: Ld a,(hl),,de,hl" when all is implemented
+
+static analysis: PVS-Studio https://www.viva64.com/en/m/0036/
+ * https://scan.coverity.com/projects/z00m128-sjasmplus
+    (needs build according to their tool or Travis CI)
+
+FIXME: get rid of ParseDirective_REPT somehow, its existence can't be right
+(breaks ` .34 repeatX` directive probably? .. and END@beginningOfLine? .. actually not?)
+
+I almost certainly broke some STRCPY/STRCAT max-size limits (i.e. malicious source may buffer overflow)...
+
+Macro world issues:
+- macros for operators? (in ideal case `zeuskeyaddr` possible to recreate in macro?)
+- more operators, capable of some string manipulation and maybe some type/expression checks (islabel)
+
+SAVEHOB/SAVETRD/SAVETAP/... global review of filename handling, adding warnings/errors
+where filename modification happens or filename is invalid.
+
+** Macro/define substitution rules and implementation (proposal):
+- macro arguments substitute with priority, from the longest ones
+- macro arguments substitute even in define related directives
+- define arguments substitute next, from the longest ones (inc. defarray)
+- name of define/macroarg starting with underscore prohibits substitution into middle
+(can substitute only at beginning)
+? extend that rule to underscore at end sealing also the tail?
+- lock some keywords for define/etc... at least put them under warning
+- inhibitor of substitutions happening (like `@djnz` inhibits macro replacement).
+** Current refactored implementation:
+- doesn't play priorities as proposed above
+- needs lot more testing and cleanup
++ should be already a bit more intuitive than 1.08+ (although it may break legacy source)
+
+DISP inside DISP bugs => documented. Correct solution = nesting DISPs?!
+
+$$label operator to get label page. (and fix pages for defl/equ/expression/... labels)
+    ^^ done, also whole label parsing and validation refactored, the syntax "$$label" is winner
+    ^^ TODO: remove this note maybe after some time, when everything will prove to be stable
+//// syntax summary:
+    labels (\.|@|)[A-Za-z_][A-Za-z0-9_.?!#@]*
+    , argument-separator    : instruction-separator     ; // comment
+    # $ hexnums, % binary, "' strings, () parentheses or memcell, [] memcell, {} device mem
+    operators-unary: ! ~ + - low high not
+    operators-binary: * / % mod + - << >> >>> shl shr <? >? < > <= >= = == != & and ^ xor | or && ||
+    us keyboard: ~!@#$%^&*()_+`-=[]{};':"<>?,./\|
+    $$label - hexa are single $ only, so this looks fine (unary operator)
+    ?label - 5<?label => ambiguous (there is already unary "?" for labels, undocummented, deprecated)
+    \label - looks weird, no syntax clash
+Needs more syntax:
+    - reformat label into different slot... <slot>$$expression ? (binary operator)
+    - differentiate 16+b address space from 16b slot-mapped address space.
+        &label/expression? Similar to C/C++? &0x1231241 ? (5123 + &1234)
+
+MMU:
+- custom pages order for wrap-next-mapping option (like "<3, 5, 1, 2>" ?)
+- err/warn/warp option for slot range?
+
+* maybe create extra syntax rules for listing files? (especially if it's possible to include asm syntax for half of line)
+
+##### sjasmplus 2.x/fork:
+
+SHELLEXEC change syntax
+
+separate local-labels vs macro-local-labels, like giving the macros new prefix? ">"?
+(issue #120)
+
+Operators precedence: (2 == 3&2) = ((2 == 3)&2) = false in current sjasmplus... ????
+    https://en.cppreference.com/w/cpp/language/operator_precedence
+Operator "word" or "w16/i16" to truncate big value (similar to "low")
+
+address space of labels -> 2|3:30|29 bits, the top bits being default slot number,
+remaining bits being physical address into global chip address space
+-> then producing machine code using the particular label would "format" physical
+label value for particular "slot" (view of value).
+
+To stay backward compatible/similar, one would have to support also 0000-FFFF range as if
+going through the mapped pages.. but that does collide with early pages 0..n ...
+How about abusing "@" or "." or something to distinguish between? (& resembles C/C++!)
+
+Make --syntax=abflL default for v2.x and check other defaults
+Maybe add support for escaped '\'' and other combinations back, to be more C++ compatible
+(escape sequences in C/C++ are case sensitive => adopt to sjasmplus (insensitive currently))
+
+Check about other syntax ambiguities, what seems too much relaxed and could be stricter for v2.x
+
+N-pass
+
+js support?
+
+====================
+Debian packaging:
+
+cmake used to enforce (and test) system libs:
+cmake -DCMAKE_BUILD_TYPE=Release -DSYSTEM_LUA=ON -DCMAKE_INSTALL_PREFIX:PATH=~/.local2/ ..
+
+https://www.debian.org/doc/manuals/distribute-deb/distribute-deb.html
+
+
+====================
+Docs:
+
+DEVICE needs better description? Issue #55
+... and also SAVENEX and default ZXNEXT device... again...
+
+When printed into PDF from browser on my local system, some of the program listings don't
+fit into their box and the end of line is cut out, check how many chars work and review
+all code listings in docs to fit into default A4 pdf print.
+(already changelog is trimmed ... seems like 88 chars is max, 80 is probably reasonable)
+
+Add chapter about usefult test-examples (library-like functions), like INC_TEXT, etc.
+
+===== github milestone v2.x: => create issues (cleanup this TODO as much as reasonable)
+v2.x of sjasmplus, changing some default settings (making it mildly incompatible with old sources, considerably more than v1.07 vs v1.14 incompatibilities), and refactoring some implementation even further, to make it hopefully a bit cleaner C++ source, simpler to maintain and modify.
+
+Major changes on my mind:
+* n-pass assembling
+* syntax by default similar to `--syntax=abflL`
+* GNU/GCC/clang-ification of assembler, mimicking the general tools as much as possible, like formatting of error reports, options with identical syntax where it makes sense, etc.. (should help with other tools unaware of sjasmplus specifically, but capable to process gcc/clang stuff)
+* `define` substitution formalized even more (and refactored)
+* C++ification of syntax and language, i.e. changing operator precedence, probably apostrophe enclosed string/char literals escaping rules, etc.
+* new operators (string and device-memory/labels related, type/checks, maybe var-arg-like stuff)
+* macro-defined-operators (not only "instructions")
+* nesting DISPs?
+* better support for Maziac's tools (label type export, whatever else is needed)
+* maybe also JavaScript scripting support
+* filepath stuff through POSIX/clib API to make it cross-platform without hacks (normal slashes everywhere)
+
+RELEASE spam:
+Next wiki assemblers
+Next discord
+Twitter
+zx-pk.ru forum
+Next FB
+(maybe once per year or two: next forum, linkedin)
+-- also update .exe/docker in tests/misc

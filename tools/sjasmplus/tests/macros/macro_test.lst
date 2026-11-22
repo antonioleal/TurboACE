@@ -1,0 +1,114 @@
+# file opened: macro_test.asm
+ 1    0000              ; new 'macro' test
+ 2    0000              ;
+ 3    0000              ; test1
+ 4    0000
+ 5    0000              	macro MyMacro arg0, arg1
+ 6    0000 ~            		call arg0_f
+ 7    0000 ~            		call arg0_arg1
+ 8    0000 ~            		call arg1_arg0
+ 9    0000              	endm
+10    0000
+11    0000              	MyMacro abc, def
+macro_test.asm(6): error: Label not found: abc_f
+macro_test.asm(11): ^ emitted from here
+11    0000 CD 00 00    >		call abc_f
+macro_test.asm(7): error: Label not found: abc_def
+macro_test.asm(11): ^ emitted from here
+11    0003 CD 00 00    >		call abc_def
+macro_test.asm(8): error: Label not found: def_abc
+macro_test.asm(11): ^ emitted from here
+11    0006 CD 00 00    >		call def_abc
+12    0009
+13    0009              ;should be expanded to:
+14    0009              ;
+15    0009              ;	call abc_f
+16    0009              ;	call abc_def
+17    0009              ;	call def_abc
+18    0009
+19    0009              ;test 2
+20    0009
+21    0009              	macro a0a1 a0, a1
+22    0009 ~            	call a0_a1__yyy
+23    0009              	endm
+24    0009
+25    0009              	macro a1a0 a0, a1
+26    0009 ~            	call a1_a0___yyy
+27    0009              	endm
+28    0009
+29    0009              	macro a1a0a1 a0, a1
+30    0009 ~            	call a1____a0__a1
+31    0009              	endm
+32    0009
+33    0009              	macro a0_a a0
+34    0009 ~            	call a0_
+35    0009              	endm
+36    0009
+37    0009              	macro a0_b a0
+38    0009 ~            	call __a0
+39    0009              	endm
+40    0009
+41    0009              	macro a0_c a0
+42    0009 ~            	call _a0_
+43    0009              	endm
+44    0009
+45    0009              	macro a0a1_a a0, a1
+46    0009 ~            	call a0____a1_
+47    0009              	endm
+48    0009
+49    0009              	macro a0a1_b a0, a1
+50    0009 ~            	call a0____yy_a1
+51    0009 ~            	call _my___yyyyy____yy__call
+52    0009              	endm
+53    0009
+54    0009              	a0a1 abc, def
+macro_test.asm(22): error: Label not found: abc_def__yyy
+macro_test.asm(54): ^ emitted from here
+54    0009 CD 00 00    >	call abc_def__yyy
+55    000C              	a1a0 abc, def
+macro_test.asm(26): error: Label not found: def_abc___yyy
+macro_test.asm(55): ^ emitted from here
+55    000C CD 00 00    >	call def_abc___yyy
+56    000F              	a1a0a1 abc, def
+macro_test.asm(30): error: Label not found: def____abc__def
+macro_test.asm(56): ^ emitted from here
+56    000F CD 00 00    >	call def____abc__def
+57    0012              	a0_a abc
+macro_test.asm(34): error: Label not found: abc_
+macro_test.asm(57): ^ emitted from here
+57    0012 CD 00 00    >	call abc_
+58    0015              	a0_b abc
+macro_test.asm(38): error: Label not found: __abc
+macro_test.asm(58): ^ emitted from here
+58    0015 CD 00 00    >	call __abc
+59    0018              	a0_c abc
+macro_test.asm(42): error: Label not found: _abc_
+macro_test.asm(59): ^ emitted from here
+59    0018 CD 00 00    >	call _abc_
+60    001B              	a0a1_a abc, def
+macro_test.asm(46): error: Label not found: abc____def_
+macro_test.asm(60): ^ emitted from here
+60    001B CD 00 00    >	call abc____def_
+61    001E              	a0a1_b abc, def
+macro_test.asm(50): error: Label not found: abc____yy_def
+macro_test.asm(61): ^ emitted from here
+61    001E CD 00 00    >	call abc____yy_def
+macro_test.asm(51): error: Label not found: _my___yyyyy____yy__call
+macro_test.asm(61): ^ emitted from here
+61    0021 CD 00 00    >	call _my___yyyyy____yy__call
+62    0024
+63    0024              ;should be expanded as
+64    0024              ;	call abc_def__yyy
+65    0024              ;	call def_abc___yyy
+66    0024              ;	call def____abc__def
+67    0024              ;	call abc_
+68    0024              ;	call __abc
+69    0024              ;	call _abc_
+70    0024              ;	call abc____def_
+71    0024              ;	call abc____yy_def
+72    0024              ;	call _my___yyyyy____yy__call
+73    0024
+# file closed: macro_test.asm
+
+Value    Label
+------ - -----------------------------------------------------------

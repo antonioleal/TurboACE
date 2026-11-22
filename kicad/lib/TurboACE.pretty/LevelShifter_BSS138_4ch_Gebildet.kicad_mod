@@ -1,0 +1,316 @@
+(footprint "LevelShifter_BSS138_4ch_Gebildet"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Gebildet 4-channel BSS138 level shifter (SparkFun BOB-12009 circuit), soldered on its two 1x6 headers, labelled side up (its BSS138s toward the carrier); rows 10.16 mm apart")
+	(tags "level shifter BSS138 module Gebildet SparkFun BOB-12009")
+	(property "Reference" "REF**"
+		(at -6.35 -12.93 0)
+		(layer "F.SilkS")
+		(uuid "2f52d76e-f013-455b-a716-66a3adb15f58")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Level shifter 4ch BSS138"
+		(at -6.35 -5.08 0)
+		(layer "F.Fab")
+		(uuid "7585fa02-a309-4d4e-905a-ff1c9b32c2d5")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0b1e531a-ef0d-4b9f-82d0-ea4b52757ac7")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "56f30be1-d251-4e34-ace1-41a327bd6040")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -13.97 -11.43)
+		(end 1.27 1.27)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "3030459f-1eae-48cf-ac02-977f79d4dff3")
+	)
+	(fp_rect
+		(start -14.22 -11.68)
+		(end 1.52 1.52)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "f5dc854e-ee04-4a76-a7d9-a50a1c438d2f")
+	)
+	(fp_rect
+		(start -13.97 -11.43)
+		(end 1.27 1.27)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "444be917-8219-450a-b373-be643028af3f")
+	)
+	(fp_text user "HV4"
+		(at -12.7 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "057a6ca2-a874-485c-9231-bcdd81e47ac6")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "LV4"
+		(at -12.7 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "30cced97-b762-4029-a748-9661d63152bd")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "HV3"
+		(at -10.16 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "0990dec6-1499-4f34-8ed1-29900263d0df")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "LV3"
+		(at -10.16 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "758d5917-851c-406d-8183-d2bc69636dee")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "GND"
+		(at -7.62 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "c67e28db-8da0-471d-9560-2e0933d6a696")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "GND"
+		(at -7.62 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "6d2635d2-d935-49b8-83a8-9a135df43361")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "HV"
+		(at -5.08 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "8e50f07f-b887-43e9-b792-08867e3bc504")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "LV"
+		(at -5.08 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "ebdbbc1b-7e1f-4a98-851a-38c17710d749")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "HV2"
+		(at -2.54 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "0e97559b-5b0a-4595-888d-bb165fed5ec6")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "LV2"
+		(at -2.54 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "58cf181c-4c42-4dd1-b721-02af4256b761")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "HV1"
+		(at 0 -7.56 90)
+		(layer "F.SilkS")
+		(uuid "f261d6b3-fae7-4603-8b18-e3d1bc60991f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "LV1"
+		(at 0 -2.6 90)
+		(layer "F.SilkS")
+		(uuid "68b1ecae-3298-470a-a74a-6b9df9a4f30d")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "d405465f-b784-442a-8f3e-c3e65ade4b5d")
+	)
+	(pad "2" thru_hole oval
+		(at -2.54 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "65491a0a-2ba7-42f8-80ae-12738f4cdf66")
+	)
+	(pad "3" thru_hole oval
+		(at -5.08 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "d22f1b31-b478-4436-a7ca-e487527f4484")
+	)
+	(pad "4" thru_hole oval
+		(at -7.62 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "d75f4858-08d4-4421-a904-6784d9847e0a")
+	)
+	(pad "5" thru_hole oval
+		(at -10.16 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "b1fe0e12-d56e-42f8-a269-9946c19820e8")
+	)
+	(pad "6" thru_hole oval
+		(at -12.7 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "c767cdd5-e563-4e43-a6de-eb16c772e1c4")
+	)
+	(pad "7" thru_hole rect
+		(at 0 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "2d8a4cbe-a447-473d-ab01-c0a18bc7bdf7")
+	)
+	(pad "8" thru_hole oval
+		(at -2.54 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "50f9cf2d-09c8-4b16-bae4-91db12c211ba")
+	)
+	(pad "9" thru_hole oval
+		(at -5.08 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "eb493eb8-7640-460c-8b40-b3f575f47bb6")
+	)
+	(pad "10" thru_hole oval
+		(at -7.62 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "96963bf8-4874-4754-83d8-93a3296d1032")
+	)
+	(pad "11" thru_hole oval
+		(at -10.16 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "8ecc69a8-3e7f-4a51-b250-7830d380a10b")
+	)
+	(pad "12" thru_hole oval
+		(at -12.7 -10.16)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "f0adad1f-bc2d-4e20-b93d-68d5f2e25668")
+	)
+	(embedded_fonts no)
+)
